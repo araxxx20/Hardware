@@ -1,0 +1,101 @@
+.container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.products-cart {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.product, .cart {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  width: 45%;
+  background-color: #f9f9f9;
+}
+
+.cart-item {
+  margin-bottom: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.btn-add, .btn-proceed, .btn-remove, .cart-item button {
+  padding: 6px 12px;
+  margin-top: 5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.btn-add {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-proceed {
+  background-color: #ffc107;
+  color: black;
+}
+
+.btn-remove {
+  background-color: #dc3545;
+  color: white;
+  margin-left: 5px;
+}
+
+.cart-item button {
+  margin-right: 5px;
+  background-color: #007bff;
+  color: white;
+}
+
+.payment, .receipt {
+  margin-top: 30px;
+  background-color: #f1f1f1;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.payment input {
+  padding: 8px;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.receipt table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.receipt th, .receipt td {
+  border: 1px solid #aaa;
+  padding: 8px;
+  text-align: center;
+  background-color: white;
+}
+
+.total {
+  font-weight: bold;
+  margin-top: 15px;
+  color: #000;
+}
