@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: all;
+}
+
+.sidebar {
+    background-color: #2a313b; /* Dark gray */
+    height: auto;   
+  }
+  
+  .sidebar a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  .sidebar a:hover {
+    background-color: #ef4444; /* Red */
+  }
+  
+
+  .navbar {
+    background-color: #272c33; /* Dark gray */
+  }
