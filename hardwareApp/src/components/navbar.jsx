@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from '../assets/logo1.png';
-import admin from '../assets/adminPIC.png';
+import admin from '../assets/admin1.png';
 import notif from '../assets/notif.png';
 import { Link } from 'react-router-dom';
 import './navbar.css';
@@ -31,24 +31,25 @@ const Navbar = ({ children }) => {
         <nav className="sidebar w-64 h-screen text-base-content custom-sidebar text-white sticky top-0 hidden md:block">
           <div className="p-4">
             {/* Menu */}
-            <h2 className="text-lg font-bold">Menu</h2>
-            <ul className="mt-4">
-              <li className="mb-2">
-                <Link to="/dashboard" className="block p-2 rounded hover:bg-error">
-                  <i className="fas fa-tachometer-alt mr-2"></i> Dashboard
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link to="/mobile-order" className="block p-2 rounded hover:bg-error">
-                  <i className="fas fa-shopping-cart mr-2"></i> Inventory
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link to="/customers" className="block p-2 rounded hover:bg-error">
-                  <i className="fas fa-users mr-2"></i> Reports
-                </Link>
-              </li>
-            </ul>
+           
+            <ul className="mt-3 pl-0 text-lg">
+  <li className="mb-2">
+    <Link to="/dashboard" className="block p-2 rounded hover:bg-error">
+      <i className="fas fa-tachometer-alt mr-2"></i> Dashboard
+    </Link>
+  </li>
+  <li className="mb-2">
+    <Link to="/mobile-order" className="block p-2 rounded hover:bg-error">
+      <i className="fas fa-shopping-cart mr-2"></i> Inventory
+    </Link>
+  </li>
+  <li className="mb-2">
+    <Link to="/salesReport" className="block p-2 rounded hover:bg-error">
+      <i className="fas fa-chart-line mr-2"></i> Sales 
+    </Link>
+  </li>
+</ul>
+
           </div>
         </nav>
 
