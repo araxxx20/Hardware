@@ -29,6 +29,25 @@ function Dashboard() {
             </div>
            
             </div>
+
+               {/* Summary Cards */}
+     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+  <div className="bg-white rounded-xl shadow p-6 flex flex-col">
+    <span className="text-blue-500 font-medium mb-2">Total Cost</span>
+    <span className="text-2xl font-bold mb-3">50,000</span>
+
+  </div>
+  <div className="bg-white rounded-xl shadow p-6 flex flex-col">
+    <span className="text-yellow-500 font-medium mb-2">Total Profit</span>
+    <span className="text-2xl font-bold mb-3">100,000</span>
+  </div>
+
+  <div className="bg-white rounded-xl shadow p-6 flex flex-col">
+    <span className="text-red-500 font-medium mb-2">Total Revenue</span>
+    <span className="text-2xl font-bold mb-3">25,000</span>
+    
+  </div>
+</div>
             {/* Main Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Sales Details and Product Sales */}
