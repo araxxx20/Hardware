@@ -39,7 +39,7 @@ const Navbar = ({ children }) => {
     </Link>
   </li>
   <li className="mb-2">
-    <Link to="/mobile-order" className="block p-2 rounded hover:bg-error">
+    <Link to="/inventory" className="block p-2 rounded hover:bg-error">
       <i className="fas fa-shopping-cart mr-2"></i> Inventory
     </Link>
   </li>
