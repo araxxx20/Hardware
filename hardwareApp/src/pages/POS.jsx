@@ -1,14 +1,23 @@
 import React, { useState } from 'react';
 import NavbarCashier from '../components/navbarcashier';
 
+import circuitBreakerImg from '../assets/circuitbreaker.png';
+import measuringTapeImg from '../assets/measuringtape.png';
+import hammerImg from '../assets/hammer.png';
+import pliersImg from '../assets/pliers.png';
+import bulbImg from '../assets/bulb.png';
+
 export default function POS() {
   const [cartItems, setCartItems] = useState([]);
   const [cash, setCash] = useState('');
   const [receipt, setReceipt] = useState(null);
 
   const products = [
-    { id: 1, name: 'Circuit Breaker', price: 350, stock: 25 },
-    { id: 2, name: 'Measuring Tape', price: 75, stock: 25 },
+    { id: 1, name: 'Circuit Breaker', price: 350, stock: 25, image: circuitBreakerImg },
+    { id: 2, name: 'Measuring Tape', price: 75, stock: 25, image: measuringTapeImg },
+    { id: 3, name: 'Hammer', price: 50, stock: 40, image: hammerImg },
+    { id: 4, name: 'Pliers', price: 60, stock: 30, image: pliersImg },
+    { id: 5, name: 'Bulb', price: 30, stock: 50, image: bulbImg },
   ];
 
   const addToCart = (product) => {
@@ -34,18 +43,28 @@ export default function POS() {
   const decrement = (id) =>
     setCartItems(
       cartItems.map((item) =>
-        item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+        item.id === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
       )
     );
 
   const remove = (id) => setCartItems(cartItems.filter((item) => item.id !== id));
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   const handlePayment = () => {
     if (Number(cash) >= totalPrice) {
       const change = Number(cash) - totalPrice;
-      setReceipt({ items: cartItems, total: totalPrice, cash: Number(cash), change });
+      setReceipt({
+        items: cartItems,
+        total: totalPrice,
+        cash: Number(cash),
+        change,
+      });
       setCartItems([]);
       setCash('');
       alert(`Payment successful! Change: ₱${change.toFixed(2)}`);
@@ -56,20 +75,29 @@ export default function POS() {
 
   return (
     <NavbarCashier>
-      <div className="max-w-7xl mx-auto p-6 font-sans flex gap-6">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 font-sans flex flex-col lg:flex-row gap-6">
         {/* Products */}
-        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((p) => (
             <div
               key={p.id}
-              className="bg-white border border-gray-300 rounded-xl p-4 shadow"
+              className="bg-white border border-gray-300 rounded-xl p-4 shadow flex flex-col justify-between h-full"
             >
-              <h2 className="text-xl font-semibold text-gray-700">{p.name}</h2>
-              <p className="text-sm text-gray-500">Stocks: {p.stock}</p>
-              <p className="text-sm text-gray-500 mb-2">Price: ₱{p.price}</p>
+              <div>
+                <div className="h-40 w-full flex items-center justify-center mb-3">
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    className="max-h-full object-contain"
+                  />
+                </div>
+                <h2 className="text-xl font-semibold text-gray-700">{p.name}</h2>
+                <p className="text-sm text-gray-500">Stocks: {p.stock}</p>
+                <p className="text-sm text-gray-500 mb-2">Price: ₱{p.price}</p>
+              </div>
               <button
                 onClick={() => addToCart(p)}
-                className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+                className="mt-2 bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
               >
                 Add to cart
               </button>
@@ -78,7 +106,7 @@ export default function POS() {
         </div>
 
         {/* Cart */}
-        <div className="w-80 bg-gray-50 border border-gray-300 rounded-xl p-4 shadow sticky top-20 h-fit">
+        <div className="lg:w-96 w-full bg-gray-50 border border-gray-300 rounded-xl p-4 shadow h-fit sticky top-20">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">Cart</h2>
           {cartItems.length === 0 ? (
             <p className="text-gray-500">No items in cart</p>
@@ -100,8 +128,8 @@ export default function POS() {
                       onClick={() => decrement(item.id)}
                       className={`px-2 rounded text-white ${
                         item.quantity === 1
-                          ? "bg-gray-300 cursor-not-allowed"
-                          : "bg-blue-500 hover:bg-blue-600"
+                          ? 'bg-gray-300 cursor-not-allowed'
+                          : 'bg-blue-500 hover:bg-blue-600'
                       }`}
                       disabled={item.quantity === 1}
                     >
@@ -136,7 +164,7 @@ export default function POS() {
               />
               <button
                 onClick={handlePayment}
-                className="bg-yellow-500 text-black font-semibold px-4 py-2 rounded hover:bg-yellow-600"
+                className="bg-yellow-500 text-black font-semibold px-4 py-2 rounded hover:bg-yellow-600 w-full"
               >
                 Proceed
               </button>

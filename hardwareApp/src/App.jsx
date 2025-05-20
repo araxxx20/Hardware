@@ -7,7 +7,7 @@ import Inventory from './pages/inventory';
 import MobileOrder from './pages/mobileOrder';
 import POS from './pages/POS';
 import SalesReport from './pages/salesreport'; // <-- Make sure this exists
-
+import CashierSales from './pages/cashiersales';
 function App() {
   return (
     <BrowserRouter>
@@ -17,6 +17,8 @@ function App() {
         <Route path="/mobile-order" element={<MobileOrder />} />
         <Route path="/pos" element={<POS />} />
         <Route path="/salesreport" element={<SalesReport />} />
+        <Route path="/sales" element={<CashierSales />} />
+
       </Routes>
     </BrowserRouter>
   );
