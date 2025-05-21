@@ -133,75 +133,99 @@ function Inventory() {
 
 
         {/* 📦 Products Section */}
-<div className="bg-white rounded-xl shadow p-6 mt-6">
-  <div className="flex items-center justify-between mb-4">
-    <h2 className="text-xl font-semibold text-gray-800">Products</h2>
-    <div className="flex gap-2 items-center">
-      <div className="relative">
+<div className="bg-white rounded-xl shadow p-4 sm:p-6 mt-6">
+  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+    <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Products</h2>
+    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+      <div className="relative w-full sm:w-auto">
         <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500">
           <Search size={16} />
         </span>
         <input
           type="text"
           placeholder="Search by name"
-          className="pl-8 pr-3 py-1 border rounded text-sm"
+          className="w-full sm:w-auto pl-8 pr-3 py-2 border rounded text-sm"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <button
+     <button
         className="btn btn-sm btn-primary text-white"
         onClick={() => setShowAddModal(true)}>Add Product</button>
     </div>
   </div>
 
+  <div className="overflow-x-auto">
+    <table className="min-w-full text-sm text-left text-gray-600">
+      <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
+        <tr>
+          <th className="px-4 py-2 whitespace-nowrap">Name</th>
+          <th className="px-4 py-2 whitespace-nowrap">Quantity</th>
+          <th className="px-4 py-2 whitespace-nowrap">Units</th>
+          <th className="px-4 py-2 whitespace-nowrap">Date</th>
+          <th className="px-4 py-2 whitespace-nowrap">Status</th>
+          <th className="px-4 py-2 whitespace-nowrap">Category</th>
+          <th className="px-4 py-2 whitespace-nowrap">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {products
+          .filter((p) =>
+            p.name.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          .map((p, index) => (
+            <tr key={index} className="border-b">
+              <td className="px-4 py-2">{p.name}</td>
+              <td className="px-4 py-2">{p.qty}</td>
+              <td className="px-4 py-2">{p.unit}</td>
+              <td className="px-4 py-2">{p.date}</td>
+              <td className="px-4 py-2">
+                <span
+                  className={
+                    p.status === "In-stock"
+                      ? "text-green-600"
+                      : p.status === "Low stock"
+                      ? "text-yellow-600"
+                      : "text-red-600"
+                  }
+                >
+                  {p.status}
+                </span>
+              </td>
+              <td className="px-4 py-2">{p.category}</td>
+              <td className="px-4 py-2 flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    setCurrentProduct(p);
+                    setShowStockModal(true);
+                  }}
+                  className="text-purple-600"
+                >
+                  <CirclePlus size={15} />
+                </button>
+                <button
+                  onClick={() => {
+                    setCurrentProduct(p);
+                    setShowEditModal(true);
+                  }}
+                  className="text-black"
+                >
+                  <Pencil size={15} />
+                </button>
+                <button
+                  onClick={() => handleDelete(p.name)}
+                  className="text-red-600"
+                >
+                  <Trash2 size={15} />
+                </button>
+              </td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  </div>
+</div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-sm text-left text-gray-600">
-              <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
-                <tr>
-                  <th className="px-4 py-2">Name</th>
-                  <th className="px-4 py-2">Quantity</th>
-                  <th className="px-4 py-2">Units</th>
-                  <th className="px-4 py-2">Date</th>
-                  <th className="px-4 py-2">Status</th>
-                  <th className="px-4 py-2">Category</th>
-                  <th className="px-4 py-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                .map((p, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="px-4 py-2">{p.name}</td>
-                    <td className="px-4 py-2">{p.qty}</td>
-                    <td className="px-4 py-2">{p.unit}</td>
-                    <td className="px-4 py-2">{p.date}</td>
-                    <td className="px-4 py-2">
-                      <span className={
-                        p.status === "In-stock" ? "text-green-600" :
-                        p.status === "Low stock" ? "text-yellow-600" : "text-red-600"}>
-                        {p.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2">{p.category}</td>
-                    <td className="px-4 py-2 flex gap-2">
-                      <button onClick={() => { setCurrentProduct(p); setShowStockModal(true); }} className="text-purple-600">
-                        <CirclePlus size={15} />
-                      </button>
-                      <button onClick={() => { setCurrentProduct(p); setShowEditModal(true); }} className="text-black">
-                        <Pencil size={15} />
-                      </button>
-                      <button onClick={() => handleDelete(p.name)} className="text-red-600">
-                        <Trash2 size={15} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
 
 
         {/* Add Product Modal */}

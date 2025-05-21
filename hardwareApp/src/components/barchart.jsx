@@ -20,7 +20,7 @@ ChartJS.register(
 );
 
 const data = {
-  labels: ['Ramen', 'Udon', 'Soba', 'Pho', 'Laksa'],
+  labels: ['Pliers', 'Bulbs', 'Screw Driver', 'Circuit Breaker', 'Hammer'],
   datasets: [
     {
       label: 'Product Sales',
