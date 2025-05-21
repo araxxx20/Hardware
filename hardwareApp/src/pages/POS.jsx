@@ -14,7 +14,7 @@ export default function POS() {
 
   const products = [
     { id: 1, name: 'Circuit Breaker', price: 350, stock: 25, image: circuitBreakerImg },
-    { id: 2, name: 'Measuring Tape', price: 75, stock: 25, image: measuringTapeImg },
+    { id: 2, name: 'Tape Measure', price: 75, stock: 25, image: measuringTapeImg },
     { id: 3, name: 'Hammer', price: 50, stock: 40, image: hammerImg },
     { id: 4, name: 'Pliers', price: 60, stock: 30, image: pliersImg },
     { id: 5, name: 'Bulb', price: 30, stock: 50, image: bulbImg },
@@ -77,7 +77,7 @@ export default function POS() {
     <NavbarCashier>
       <div className="max-w-7xl mx-auto p-4 sm:p-6 font-sans flex flex-col lg:flex-row gap-6">
         {/* Products */}
-        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex-grow grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map((p) => (
             <div
               key={p.id}

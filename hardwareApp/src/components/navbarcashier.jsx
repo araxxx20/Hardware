@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import logo from '../assets/logo1.png';
 import admin from '../assets/admin1.png';
 import notif from '../assets/notif.png';
@@ -14,6 +15,23 @@ const NavbarCashier = ({ children }) => {
     { to: "/pos", icon: "fas fa-tachometer-alt", label: "POS" },
     { to: "/sales", icon: "fas fa-cash-register", label: "Sales" },
   ];
+
+const [currentTime, setCurrentTime] = useState(new Date());
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setCurrentTime(new Date());
+  }, 1000); 
+
+  return () => clearInterval(interval); 
+}, []);
+
+const formattedTime = currentTime.toLocaleTimeString([], {
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true
+});
+
 
   return (
     <div className="min-h-screen flex flex-col" data-theme="autumn">
@@ -35,7 +53,7 @@ const NavbarCashier = ({ children }) => {
         {/* Right side content */}
         <div className="flex items-center space-x-2 text-sm sm:text-base">
           <img src={notif} alt="notif" className="h-8 w-8" />
-          <span className="font-semibold text-yellow-100">7:30 AM</span>
+          <span className="font-semibold text-yellow-100">{formattedTime}</span>
           <img src={admin} alt="admin" className="h-8 w-8" />
           <span className="font-semibold cursor-pointer">Log Out</span>
         </div>
