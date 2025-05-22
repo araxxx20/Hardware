@@ -19,7 +19,7 @@ const NavbarCashier = ({ children }) => {
 
 const [currentTime, setCurrentTime] = useState(new Date());
 const handleLogout = () => {
-    navigate('/login'); 
+    navigate('/'); 
   };
 useEffect(() => {
   const interval = setInterval(() => {
