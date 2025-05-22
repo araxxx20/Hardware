@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import logo from '../assets/logo1.png';
 import admin from '../assets/admin1.png';
@@ -9,6 +9,7 @@ import './navbar.css';
 const Navbar = ({ children }) => {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate(); 
 
   const menuItems = [
     { to: '/dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
@@ -17,6 +18,9 @@ const Navbar = ({ children }) => {
   ];
 
   const [currentTime, setCurrentTime] = useState(new Date());
+  const handleLogout = () => {
+    navigate('/login'); 
+  };
 
 useEffect(() => {
   const interval = setInterval(() => {
@@ -53,7 +57,9 @@ const formattedTime = currentTime.toLocaleTimeString([], {
           <img src={notif} alt="notif" className="h-8 w-8" />
          <span className="font-semibold text-yellow-100">{formattedTime}</span>
           <img src={admin} alt="admin" className="h-8 w-8" />
-          <span className="font-semibold cursor-pointer">Log Out</span>
+          <span onClick={handleLogout} className="font-semibold cursor-pointer hover:underline">
+            Log Out
+          </span>
         </div>
       </header>
 

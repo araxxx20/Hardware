@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Navbar from '../components/navbar';
+import Swal from 'sweetalert2';
 import { Search } from 'lucide-react';
 import { CirclePlus, Pencil, Trash2 } from 'lucide-react';
 
@@ -25,71 +26,116 @@ function Inventory() {
     qty === 0 ? "Out of stock" : qty < 5 ? "Low stock" : "In-stock";
 
 
+  //uPDATED WITH SWEATALERT INSTALL MUNA 
   // Add product
   const handleAddProduct = (e) => {
-    e.preventDefault();
-    const form = e.target;
- const newProduct = {
-  name: form.name.value,
-  qty: parseInt(form.qty.value),
-  unit: form.unit.value,
-  date: form.date.value,
-  category: form.category.value,
-  status: calculateStatus(parseInt(form.qty.value)),
+  e.preventDefault();
+  const form = e.target;
+  const newProduct = {
+    name: form.name.value,
+    qty: parseInt(form.qty.value),
+    unit: form.unit.value,
+    date: form.date.value,
+    category: form.category.value,
+    status: calculateStatus(parseInt(form.qty.value)),
+  };
+
+  setProducts([...products, newProduct]);
+  setShowAddModal(false);
+  form.reset();
+
+  Swal.fire({
+    icon: 'success',
+    title: 'Product Added',
+    text: `${newProduct.name} has been added successfully.`,
+    timer: 2000,
+    showConfirmButton: false
+  });
 };
 
-
-    setProducts([...products, newProduct]);
-    setShowAddModal(false);
-    form.reset();
-  };
 
 
   // Edit product
   const handleEditProduct = (e) => {
-    e.preventDefault();
-    const form = e.target;
-   const updatedProduct = {
-  name: form.name.value,
-  qty: parseInt(form.qty.value),
-  unit: form.unit.value,
-  date: form.date.value,
-  category: form.category.value,
-  status: calculateStatus(parseInt(form.qty.value)),
+  e.preventDefault();
+  const form = e.target;
+  const updatedProduct = {
+    name: form.name.value,
+    qty: parseInt(form.qty.value),
+    unit: form.unit.value,
+    date: form.date.value,
+    category: form.category.value,
+    status: calculateStatus(parseInt(form.qty.value)),
+  };
+
+  setProducts(products.map(p => (p.name === currentProduct.name ? updatedProduct : p)));
+  setShowEditModal(false);
+
+  Swal.fire({
+    icon: 'success',
+    title: 'Product Updated',
+    text: `${updatedProduct.name} was updated successfully.`,
+    timer: 2000,
+    showConfirmButton: false
+  });
 };
 
-
-    setProducts(products.map(p => (p.name === currentProduct.name ? updatedProduct : p)));
-    setShowEditModal(false);
-  };
 
 
   // Add stock
   const handleAddStock = (e) => {
-    e.preventDefault();
-    const addedQty = parseInt(e.target.qty.value);
-    const updated = products.map(p => {
-      if (p.name === currentProduct.name) {
-        const newQty = p.qty + addedQty;
-        return {
-          ...p,
-          qty: newQty,
-          status: calculateStatus(newQty)
-        };
-      }
-      return p;
-    });
-    setProducts(updated);
-    setShowStockModal(false);
-  };
-
-
-  const handleDelete = (name) => {
-    if (confirm(`Delete ${name}?`)) {
-      setProducts(products.filter(p => p.name !== name));
+  e.preventDefault();
+  const addedQty = parseInt(e.target.qty.value);
+  const updated = products.map(p => {
+    if (p.name === currentProduct.name) {
+      const newQty = p.qty + addedQty;
+      return {
+        ...p,
+        qty: newQty,
+        status: calculateStatus(newQty)
+      };
     }
-  };
+    return p;
+  });
 
+  setProducts(updated);
+  setShowStockModal(false);
+
+  Swal.fire({
+    icon: 'success',
+    title: 'Stock Added',
+    text: `Stock was added to ${currentProduct.name}.`,
+    timer: 2000,
+    showConfirmButton: false
+  });
+};
+
+
+
+ const handleDelete = (name) => {
+  Swal.fire({
+    title: `Delete ${name}?`,
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      setProducts(products.filter(p => p.name !== name));
+      Swal.fire({
+        icon: 'success',
+        title: 'Deleted!',
+        text: `${name} has been deleted.`,
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+  });
+};
+
+//HANGGANG DINE
 
   const [searchTerm, setSearchTerm] = useState('');
 
