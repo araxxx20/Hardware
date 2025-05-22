@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import logo from '../assets/logo1.png';
-import admin from '../assets/admin1.png';
+import admin from '../assets/Admin1.png';
 import notif from '../assets/notif.png';
 import './navbar.css';
 
