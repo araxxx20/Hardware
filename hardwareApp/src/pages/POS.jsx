@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import NavbarCashier from '../components/navbarcashier';
-
+import Swal from 'sweetalert2';
 import circuitBreakerImg from '../assets/circuitbreaker.png';
 import measuringTapeImg from '../assets/measuringtape.png';
 import hammerImg from '../assets/hammer.png';
@@ -56,22 +56,35 @@ export default function POS() {
     0
   );
 
-  const handlePayment = () => {
-    if (Number(cash) >= totalPrice) {
-      const change = Number(cash) - totalPrice;
-      setReceipt({
-        items: cartItems,
-        total: totalPrice,
-        cash: Number(cash),
-        change,
-      });
-      setCartItems([]);
-      setCash('');
-      alert(`Payment successful! Change: ₱${change.toFixed(2)}`);
-    } else {
-      alert('Insufficient amount');
-    }
-  };
+//uPDATED WITH SWEATALERT
+ const handlePayment = () => {
+  if (Number(cash) >= totalPrice) {
+    const change = Number(cash) - totalPrice;
+    setReceipt({
+      items: cartItems,
+      total: totalPrice,
+      cash: Number(cash),
+      change,
+    });
+    setCartItems([]);
+    setCash('');
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Payment Successful!',
+      html: `<p>Change: <strong>₱${change.toFixed(2)}</strong></p>`,
+      confirmButtonColor: '#22c55e'
+    });
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Insufficient Cash',
+      text: 'Please enter an amount equal to or greater than the total.',
+      confirmButtonColor: '#ef4444'
+    });
+  }
+};
+
 
   return (
     <NavbarCashier>
