@@ -14,7 +14,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} /> {/* <-- Login page as root */}
+        <Route path="/" element={<Login />} /> {/* <-- Login page as root */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/mobile-order" element={<MobileOrder />} />
