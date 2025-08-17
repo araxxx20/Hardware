@@ -14,6 +14,8 @@ const Navbar = ({ children }) => {
   const menuItems = [
     { to: '/dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
     { to: '/inventory', icon: 'fas fa-shopping-cart', label: 'Inventory' },
+    { to: '/users', icon: 'fas fa-users', label: 'Users' },
+    { to: '/customer-orders', icon: 'fas fa-clipboard-list', label: 'Customer Orders' },
     { to: '/salesReport', icon: 'fas fa-chart-line', label: 'Sales' },
   ];
 
