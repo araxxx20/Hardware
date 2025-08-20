@@ -45,6 +45,18 @@ function CustomerReservations() {
     return `px-2 py-1 rounded-full text-xs font-medium ${statusStyles[status] || 'bg-gray-100 text-gray-800'}`;
   };
 
+  // Get display status text based on active tab
+  const getDisplayStatus = (status) => {
+    if (activeTab === 'orders') {
+      switch(status) {
+        case 'Reserved': return 'Processing';
+        case 'Ready': return 'Shipped';
+        default: return status;
+      }
+    }
+    return status === 'Ready' ? 'Ready for Pickup' : status;
+  };
+
   // Get status icon
   const getStatusIcon = (status) => {
     switch(status) {
@@ -118,7 +130,7 @@ function CustomerReservations() {
         </div>
 
         {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 sm:gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 sm:gap-6 mb-8">
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
             <span className="text-blue-500 font-medium mb-2">Total {activeTab === 'reservations' ? 'Reservations' : 'Orders'}</span>
             <span className="text-2xl font-bold mb-3">{statusCounts.total}</span>
@@ -134,6 +146,10 @@ function CustomerReservations() {
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
             <span className="text-green-500 font-medium mb-2">{activeTab === 'reservations' ? 'Ready' : 'Shipped'}</span>
             <span className="text-2xl font-bold mb-3">{statusCounts.ready}</span>
+          </div>
+          <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
+            <span className="text-purple-500 font-medium mb-2">Completed</span>
+            <span className="text-2xl font-bold mb-3">{statusCounts.completed}</span>
           </div>
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
             <span className="text-red-500 font-medium mb-2">Cancelled</span>
@@ -187,7 +203,7 @@ function CustomerReservations() {
                     <td className="px-4 py-2">
                       <span className={`inline-flex items-center gap-1 ${getStatusBadge(order.status)}`}>
                         {getStatusIcon(order.status)}
-                        {order.status}
+                        {getDisplayStatus(order.status)}
                       </span>
                     </td>
                     <td className="px-4 py-2">{order.orderDate}</td>
