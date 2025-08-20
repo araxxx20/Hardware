@@ -9,34 +9,34 @@ import './navbar.css';
 const Navbar = ({ children }) => {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const menuItems = [
     { to: '/dashboard', icon: 'fas fa-tachometer-alt', label: 'Dashboard' },
     { to: '/inventory', icon: 'fas fa-shopping-cart', label: 'Inventory' },
     { to: '/users', icon: 'fas fa-users', label: 'Users' },
-    { to: '/customer-orders', icon: 'fas fa-clipboard-list', label: 'Customer Orders' },
+    { to: '/customer-orders', icon: 'fas fa-clipboard-list', label: 'Orders and Reservations' },
     { to: '/salesReport', icon: 'fas fa-chart-line', label: 'Sales' },
   ];
 
   const [currentTime, setCurrentTime] = useState(new Date());
   const handleLogout = () => {
-    navigate('/'); 
+    navigate('/');
   };
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    setCurrentTime(new Date());
-  }, 1000); 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
 
-  return () => clearInterval(interval); 
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
-const formattedTime = currentTime.toLocaleTimeString([], {
-  hour: '2-digit',
-  minute: '2-digit',
-  hour12: true
-});
+  const formattedTime = currentTime.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
 
   return (
     <div className="min-h-screen flex flex-col" data-theme="autumn">
@@ -57,7 +57,7 @@ const formattedTime = currentTime.toLocaleTimeString([], {
         {/* Right section */}
         <div className="flex items-center space-x-2 text-sm sm:text-base">
           <img src={notif} alt="notif" className="h-8 w-8" />
-         <span className="font-semibold text-yellow-100">{formattedTime}</span>
+          <span className="font-semibold text-yellow-100">{formattedTime}</span>
           <img src={admin} alt="admin" className="h-8 w-8" />
           <span onClick={handleLogout} className="font-semibold cursor-pointer hover:underline">
             Log Out
@@ -78,9 +78,8 @@ const formattedTime = currentTime.toLocaleTimeString([], {
                 <li key={to} className="mb-2">
                   <Link
                     to={to}
-                    className={`block p-2 rounded hover:bg-error flex items-center ${
-                      location.pathname === to ? 'bg-error' : ''
-                    }`}
+                    className={`block p-2 rounded hover:bg-error flex items-center ${location.pathname === to ? 'bg-error' : ''
+                      }`}
                     onClick={() => setIsSidebarOpen(false)}
                   >
                     <i className={`${icon} mr-2`}></i> {label}
