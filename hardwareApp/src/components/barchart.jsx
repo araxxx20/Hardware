@@ -246,9 +246,9 @@ function BarChart({ onChartTypeChange, onTimePeriodChange }) {
       },
       title: {
         display: true,
-        text: chartType === 'suppliesFlow' ? 'Total Stock In vs Stock Out' : 
-               chartType === 'topSellingProducts' ? 'Top Selling Products' : 
-               `Sales & Expenses Analysis (${salesExpensesView === 'whole' ? 'Overall' : 'Per Product'})`,
+        text: chartType === 'suppliesFlow' ? 'Total Stock In vs Stock Out' :
+          chartType === 'topSellingProducts' ? 'Top Selling Products' :
+            `Sales & Expenses Analysis (${salesExpensesView === 'whole' ? 'Overall' : 'Per Product'})`,
         font: {
           size: 14,
           weight: 'bold'
@@ -294,8 +294,8 @@ function BarChart({ onChartTypeChange, onTimePeriodChange }) {
         display: true,
         title: {
           display: true,
-          text: chartType === 'topSellingProducts' ? 'Units Sold' : 
-                chartType === 'salesExpenses' ? 'Amount (₱)' : 'Quantity (Units)',
+          text: chartType === 'topSellingProducts' ? 'Units Sold' :
+            chartType === 'salesExpenses' ? 'Amount (₱)' : 'Quantity (Units)',
           font: {
             size: 12,
             weight: 'bold'
@@ -364,7 +364,7 @@ function BarChart({ onChartTypeChange, onTimePeriodChange }) {
         const salesData = currentData.datasets[0].data;
         const expensesData = currentData.datasets[1].data;
         const profitData = currentData.datasets[2].data;
-        
+
         return {
           totalSales: salesData.reduce((sum, val) => sum + val, 0),
           totalExpenses: expensesData.reduce((sum, val) => sum + val, 0),
@@ -426,7 +426,7 @@ function BarChart({ onChartTypeChange, onTimePeriodChange }) {
         {chartType === 'salesExpenses' && (
           <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0 w-full sm:w-auto">
             {/* Time Period Dropdown */}
-            <select 
+            <select
               value={timePeriod}
               onChange={(e) => handleTimePeriodChange(e.target.value)}
               className="text-xs bg-white border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-green-500 w-full sm:w-auto"
@@ -435,9 +435,9 @@ function BarChart({ onChartTypeChange, onTimePeriodChange }) {
               <option value="monthly">Monthly View</option>
               <option value="annual">Annual View</option>
             </select>
-            
+
             {/* View Toggle */}
-            <select 
+            <select
               className="text-xs bg-white border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-purple-500 w-full sm:w-auto"
               onChange={(e) => setSalesExpensesView(e.target.value)}
               value={salesExpensesView}
@@ -447,7 +447,7 @@ function BarChart({ onChartTypeChange, onTimePeriodChange }) {
             </select>
           </div>
         )}
-        
+
       </div>
 
       {/* Chart */}
@@ -456,18 +456,17 @@ function BarChart({ onChartTypeChange, onTimePeriodChange }) {
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mt-4">
         {chartType === 'suppliesFlow' && (
           <>
-            <div className="col-start-2 bg-green-50 rounded-lg p-3 text-center">
-              <p className="text-xs text-green-600 font-medium">Total Stock</p>
+            <div className="bg-green-50 rounded-lg p-3 text-center">
+              <p className="text-xs text-green-600 font-medium">Total Stock In</p>
               <p className="text-lg font-bold text-green-800">{summaryStats.totalInflow}</p>
             </div>
             <div className="bg-red-50 rounded-lg p-3 text-center">
               <p className="text-xs text-red-600 font-medium">Total Stock Out</p>
               <p className="text-lg font-bold text-red-800">{summaryStats.totalOutflow}</p>
             </div>
-
           </>
         )}
         {chartType === 'topSellingProducts' && (

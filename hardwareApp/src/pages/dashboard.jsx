@@ -369,7 +369,7 @@ function Dashboard() {
                                 <div className="flex items-center space-x-2">
                                   <span className="text-sm text-blue-600 font-bold">{product.unitsSold} units</span>
                                   <span className={`text-xs ${product.trend === 'up' ? 'text-green-600' :
-                                      product.trend === 'down' ? 'text-red-600' : 'text-gray-600'
+                                    product.trend === 'down' ? 'text-red-600' : 'text-gray-600'
                                     }`}>
                                     {product.trend === 'up' ? '↗' : product.trend === 'down' ? '↘' : '→'}
                                   </span>
