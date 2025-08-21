@@ -184,6 +184,36 @@ export const OrderProvider = ({ children }) => {
     };
   };
 
+  const getReservationStats = () => {
+    const today = new Date().toISOString().split('T')[0];
+    const reservations = orders.filter(order => order.type === 'reservation' || !order.type);
+    
+    return {
+      totalReservations: reservations.length,
+      activeReservations: reservations.filter(reservation => 
+        reservation.status === "Pending" || reservation.status === "Reserved" || reservation.status === "Ready"
+      ).length,
+      pendingReservations: reservations.filter(reservation => 
+        reservation.status === "Pending"
+      ).length,
+      todayRevenue: reservations
+        .filter(reservation => reservation.orderDate === today)
+        .reduce((sum, reservation) => {
+          const amount = parseFloat(reservation.totalAmount.replace('₱', '').replace(',', ''));
+          return sum + amount;
+        }, 0),
+      completedReservations: reservations.filter(reservation => reservation.status === "Completed").length,
+      cancelledReservations: reservations.filter(reservation => reservation.status === "Cancelled").length,
+      statusBreakdown: {
+        pending: reservations.filter(reservation => reservation.status === "Pending").length,
+        reserved: reservations.filter(reservation => reservation.status === "Reserved").length,
+        ready: reservations.filter(reservation => reservation.status === "Ready").length,
+        completed: reservations.filter(reservation => reservation.status === "Completed").length,
+        cancelled: reservations.filter(reservation => reservation.status === "Cancelled").length
+      }
+    };
+  };
+
   const getTodayOrders = () => {
     const today = new Date().toISOString().split('T')[0];
     return orders.filter(order => order.orderDate === today);
@@ -199,6 +229,7 @@ export const OrderProvider = ({ children }) => {
     orders,
     updateOrderStatus,
     getOrderStats,
+    getReservationStats,
     getTodayOrders,
     getRecentOrders
   };

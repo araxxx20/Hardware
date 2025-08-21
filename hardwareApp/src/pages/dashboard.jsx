@@ -17,11 +17,12 @@ function Dashboard() {
   const { getLowStockItems, getInventoryStats, products } = useInventory();
 
   // Use shared order data from context
-  const { getOrderStats } = useOrders();
+  const { getOrderStats, getReservationStats } = useOrders();
 
   const lowStockItems = getLowStockItems();
   const inventoryStats = getInventoryStats();
   const orderStats = getOrderStats();
+  const reservationStats = getReservationStats();
   const displayedItems = showAllStock ? lowStockItems : lowStockItems.slice(0, 5);
 
   // Calculate descriptive analytics for product trends
@@ -256,7 +257,7 @@ function Dashboard() {
           </div>
           <div className="bg-white rounded-xl shadow p-6 flex flex-col">
             <span className="text-gray-500 font-medium mb-2">Daily Sales</span>
-            <span className="text-2xl font-bold mb-1">₱{orderStats.todayRevenue.toLocaleString()}</span>
+            <span className="text-2xl font-bold mb-1">₱{reservationStats.todayRevenue.toLocaleString()}</span>
             <span className="text-green-500 text-sm font-medium">▲ 4.3% Up from yesterday</span>
           </div>
         </div>
@@ -573,21 +574,24 @@ function Dashboard() {
 
             {/* Quick Stats */}
             <div className="bg-white rounded-xl shadow p-6">
-              <h4 className="font-bold text-lg mb-4">Orders</h4>
+              <h4 className="font-bold text-lg mb-4">Reservations</h4>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Total Products</span>
-                  <span className="font-semibold">{inventoryStats.totalProducts}</span>
+                  <span className="text-sm text-gray-600">Total Reservations</span>
+                  <span className="font-semibold">{reservationStats.totalReservations}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Active Orders</span>
-                  <span className="font-semibold text-blue-600">{orderStats.activeOrders}</span>
+                  <span className="text-sm text-gray-600">Active Reservations</span>
+                  <span className="font-semibold text-blue-600">{reservationStats.activeReservations}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Pending Deliveries</span>
-                  <span className="font-semibold text-orange-600">{orderStats.pendingDeliveries}</span>
+                  <span className="text-sm text-gray-600">Pending Reservations</span>
+                  <span className="font-semibold text-orange-600">{reservationStats.pendingReservations}</span>
                 </div>
-
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Ready for Pickup</span>
+                  <span className="font-semibold text-green-600">{reservationStats.statusBreakdown.ready}</span>
+                </div>
               </div>
             </div>
           </div>

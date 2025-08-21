@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/navbar';
 import Swal from 'sweetalert2';
-import { Search, Pencil, Eye, Package, Clock, CheckCircle, XCircle, ShoppingCart } from 'lucide-react';
+import { Search, Pencil, Eye, Package, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { useOrders } from '../context/OrderContext';
 
 function CustomerReservations() {
@@ -11,7 +11,6 @@ function CustomerReservations() {
   const [showCustomerInfoModal, setShowCustomerInfoModal] = useState(false);
   const [currentOrder, setCurrentOrder] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState('reservations');
 
   // Edit reservation status
   const handleEditStatus = (e) => {
@@ -25,7 +24,7 @@ function CustomerReservations() {
     Swal.fire({
       icon: 'success',
       title: 'Status Updated',
-      text: `${activeTab === 'reservations' ? 'Reservation' : 'Order'} status has been updated to ${newStatus}.`,
+      text: `Reservation status has been updated to ${newStatus}.`,
       timer: 2000,
       showConfirmButton: false
     });
@@ -41,25 +40,18 @@ function CustomerReservations() {
       'Cancelled': 'bg-red-100 text-red-800',
       'Completed': 'bg-purple-100 text-purple-800'
     };
-    
+
     return `px-2 py-1 rounded-full text-xs font-medium ${statusStyles[status] || 'bg-gray-100 text-gray-800'}`;
   };
 
-  // Get display status text based on active tab
+  // Get display status text for reservations
   const getDisplayStatus = (status) => {
-    if (activeTab === 'orders') {
-      switch(status) {
-        case 'Reserved': return 'Processing';
-        case 'Ready': return 'Shipped';
-        default: return status;
-      }
-    }
     return status === 'Ready' ? 'Ready for Pickup' : status;
   };
 
   // Get status icon
   const getStatusIcon = (status) => {
-    switch(status) {
+    switch (status) {
       case 'Pending': return <Clock size={14} />;
       case 'Reserved': return <Package size={14} />;
       case 'Ready': return <CheckCircle size={14} />;
@@ -73,18 +65,14 @@ function CustomerReservations() {
     const matchesSearch = order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.status.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesType = activeTab === 'reservations' 
-      ? (order.type === 'reservation' || !order.type) // backward compatibility
-      : order.type === 'order';
-    
+
+    const matchesType = order.type === 'reservation' || !order.type; // backward compatibility
+
     return matchesSearch && matchesType;
   });
 
-  const currentTypeOrders = orders.filter(order => 
-    activeTab === 'reservations' 
-      ? (order.type === 'reservation' || !order.type)
-      : order.type === 'order'
+  const currentTypeOrders = orders.filter(order =>
+    order.type === 'reservation' || !order.type
   );
 
   const statusCounts = {
@@ -99,40 +87,11 @@ function CustomerReservations() {
   return (
     <Navbar>
       <main className="flex-1 p-4 sm:p-8">
-        {/* Tab Navigation */}
-        <div className="mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
-              <button
-                onClick={() => setActiveTab('reservations')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === 'reservations'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-800'
-                }`}
-              >
-                <Package className="inline-block w-4 h-4 mr-2" />
-                Customer Reservations
-              </button>
-              <button
-                onClick={() => setActiveTab('orders')}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeTab === 'orders'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-800'
-                }`}
-              >
-                <ShoppingCart className="inline-block w-4 h-4 mr-2" />
-                Customer Orders
-              </button>
-            </div>
-          </div>
-        </div>
 
         {/* Dashboard Cards */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 sm:gap-6 mb-8">
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
-            <span className="text-blue-500 font-medium mb-2">Total {activeTab === 'reservations' ? 'Reservations' : 'Orders'}</span>
+            <span className="text-blue-500 font-medium mb-2">Total Reservations</span>
             <span className="text-2xl font-bold mb-3">{statusCounts.total}</span>
           </div>
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
@@ -140,11 +99,11 @@ function CustomerReservations() {
             <span className="text-2xl font-bold mb-3">{statusCounts.pending}</span>
           </div>
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
-            <span className="text-blue-500 font-medium mb-2">{activeTab === 'reservations' ? 'Reserved' : 'Processing'}</span>
+            <span className="text-blue-500 font-medium mb-2">Reserved</span>
             <span className="text-2xl font-bold mb-3">{statusCounts.reserved}</span>
           </div>
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
-            <span className="text-green-500 font-medium mb-2">{activeTab === 'reservations' ? 'Ready' : 'Shipped'}</span>
+            <span className="text-green-500 font-medium mb-2">Ready</span>
             <span className="text-2xl font-bold mb-3">{statusCounts.ready}</span>
           </div>
           <div className="bg-white rounded-xl shadow p-4 sm:p-6 flex flex-col">
@@ -161,7 +120,7 @@ function CustomerReservations() {
         <div className="bg-white rounded-xl shadow p-4 sm:p-6 mt-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
-              {activeTab === 'reservations' ? 'Customer Reservations' : 'Customer Orders'}
+              Customer Reservations
             </h2>
             <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
               <div className="relative w-full sm:w-auto">
@@ -170,7 +129,7 @@ function CustomerReservations() {
                 </span>
                 <input
                   type="text"
-                  placeholder={`Search ${activeTab}...`}
+                  placeholder="Search reservations..."
                   className="w-full sm:w-auto pl-8 pr-3 py-2 border rounded text-sm"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -184,10 +143,10 @@ function CustomerReservations() {
               <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
                 <tr>
                   <th className="px-4 py-2 whitespace-nowrap">Customer Name</th>
-                  <th className="px-4 py-2 whitespace-nowrap">{activeTab === 'reservations' ? 'Product Reserved' : 'Product Ordered'}</th>
+                  <th className="px-4 py-2 whitespace-nowrap">Product Reserved</th>
                   <th className="px-4 py-2 whitespace-nowrap">Quantity</th>
                   <th className="px-4 py-2 whitespace-nowrap">Status</th>
-                  <th className="px-4 py-2 whitespace-nowrap">{activeTab === 'reservations' ? 'Reservation Date' : 'Order Date'}</th>
+                  <th className="px-4 py-2 whitespace-nowrap">Reservation Date</th>
                   <th className="px-4 py-2 whitespace-nowrap">Total Amount</th>
                   <th className="px-4 py-2 whitespace-nowrap">Actions</th>
                 </tr>
@@ -225,7 +184,7 @@ function CustomerReservations() {
                           setShowEditStatusModal(true);
                         }}
                         className="text-green-600 hover:text-green-800"
-                        title={`Edit ${activeTab === 'reservations' ? 'Reservation' : 'Order'} Status`}
+                        title="Edit Reservation Status"
                       >
                         <Pencil size={15} />
                       </button>
@@ -240,7 +199,7 @@ function CustomerReservations() {
 
         {/* Edit Status Modal */}
         {showEditStatusModal && currentOrder && (
-          <Modal title={`Edit ${activeTab === 'reservations' ? 'Reservation' : 'Order'} Status - ${currentOrder.customerName}`} onClose={() => setShowEditStatusModal(false)}>
+          <Modal title={`Edit Reservation Status - ${currentOrder.customerName}`} onClose={() => setShowEditStatusModal(false)}>
             <form onSubmit={handleEditStatus} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -253,8 +212,8 @@ function CustomerReservations() {
                 >
                   <option value="">Select New Status</option>
                   <option value="Pending">Pending</option>
-                  <option value="Reserved">{activeTab === 'reservations' ? 'Reserved' : 'Processing'}</option>
-                  <option value="Ready">{activeTab === 'reservations' ? 'Ready for Pickup' : 'Shipped'}</option>
+                  <option value="Reserved">Reserved</option>
+                  <option value="Ready">Ready for Pickup</option>
                   <option value="Completed">Completed</option>
                   <option value="Cancelled">Cancelled</option>
                 </select>
@@ -283,7 +242,7 @@ function CustomerReservations() {
           <Modal title={`Customer Information - ${currentOrder.customerName}`} onClose={() => setShowCustomerInfoModal(false)}>
             <div className="space-y-4">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-gray-800 mb-3">{activeTab === 'reservations' ? 'Reservation' : 'Order'} Details</h4>
+                <h4 className="font-semibold text-gray-800 mb-3">Reservation Details</h4>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <span className="font-medium text-gray-600">Product:</span>
@@ -294,7 +253,7 @@ function CustomerReservations() {
                     <p className="text-gray-800">{currentOrder.quantity} {currentOrder.unit}</p>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-600">{activeTab === 'reservations' ? 'Reservation' : 'Order'} Date:</span>
+                    <span className="font-medium text-gray-600">Reservation Date:</span>
                     <p className="text-gray-800">{currentOrder.orderDate}</p>
                   </div>
                   <div>
