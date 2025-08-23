@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/navbar';
 import Swal from 'sweetalert2';
-import { Search } from 'lucide-react';
+import { Search, Camera, X } from 'lucide-react';
 import { CirclePlus, Pencil, Trash2 } from 'lucide-react';
 import { useInventory } from '../context/InventoryContext';
 
@@ -19,6 +19,26 @@ function Inventory() {
   const [showStockModal, setShowStockModal] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  // Handle image upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const clearImage = () => {
+    setSelectedImage(null);
+    setImagePreview(null);
+  };
 
   // Add product
   const handleAddProduct = (e) => {
@@ -30,11 +50,13 @@ function Inventory() {
       unit: form.unit.value,
       date: form.date.value,
       category: form.category.value,
+      image: imagePreview || null, // Store the base64 image
     };
 
     addProduct(newProduct);
     setShowAddModal(false);
     form.reset();
+    clearImage();
 
     Swal.fire({
       icon: 'success',
@@ -55,10 +77,12 @@ function Inventory() {
       unit: form.unit.value,
       date: form.date.value,
       category: form.category.value,
+      image: imagePreview || currentProduct.image || null, // Keep existing image if no new one
     };
 
     updateProduct(currentProduct.name, updatedProduct);
     setShowEditModal(false);
+    clearImage();
 
     Swal.fire({
       icon: 'success',
@@ -170,6 +194,7 @@ function Inventory() {
             <table className="min-w-full text-sm text-left text-gray-600">
               <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
                 <tr>
+                  <th className="px-4 py-2 whitespace-nowrap">Image</th>
                   <th className="px-4 py-2 whitespace-nowrap">Name</th>
                   <th className="px-4 py-2 whitespace-nowrap">Quantity</th>
                   <th className="px-4 py-2 whitespace-nowrap">Units</th>
@@ -186,6 +211,19 @@ function Inventory() {
                   )
                   .map((p, index) => (
                     <tr key={index} className="border-b">
+                      <td className="px-4 py-2">
+                        {p.image ? (
+                          <img 
+                            src={p.image} 
+                            alt={p.name} 
+                            className="w-12 h-12 object-cover rounded-lg border"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                            <Camera size={16} className="text-gray-400" />
+                          </div>
+                        )}
+                      </td>
                       <td className="px-4 py-2">{p.name}</td>
                       <td className="px-4 py-2">{p.qty}</td>
                       <td className="px-4 py-2">{p.unit}</td>
@@ -239,15 +277,57 @@ function Inventory() {
 
         {/* Add Product Modal */}
         {showAddModal && (
-          <Modal title="Add Product" onClose={() => setShowAddModal(false)}>
+          <Modal title="Add Product" onClose={() => { setShowAddModal(false); clearImage(); }}>
             <form onSubmit={handleAddProduct}>
+              {/* Image Upload Section */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
+                <div className="flex items-center gap-4">
+                  {imagePreview ? (
+                    <div className="relative">
+                      <img 
+                        src={imagePreview} 
+                        alt="Preview" 
+                        className="w-20 h-20 object-cover rounded-lg border"
+                      />
+                      <button
+                        type="button"
+                        onClick={clearImage}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
+                      <Camera size={20} className="text-gray-400" />
+                    </div>
+                  )}
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      id="image-upload"
+                    />
+                    <label
+                      htmlFor="image-upload"
+                      className="cursor-pointer bg-blue-500 text-white px-3 py-2 rounded text-sm hover:bg-blue-600"
+                    >
+                      Choose Image
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
               <input name="name" required placeholder="Name" className="w-full border px-3 py-2 rounded mb-4"/>
               <input name="qty" type="number" required placeholder="Quantity" className="w-full border px-3 py-2 rounded mb-4"/>
               <input name="unit" required placeholder="Unit" className="w-full border px-3 py-2 rounded mb-4"/>
               <input name="date" type="date" required className="w-full border px-3 py-2 rounded mb-4"/>
               <input name="category" required placeholder="Category" className="w-full border px-3 py-2 rounded mb-4"/>
               <div className="flex justify-end gap-2">
-                <button type="button" onClick={() => setShowAddModal(false)} className="btn bg-gray-300">Cancel</button>
+                <button type="button" onClick={() => { setShowAddModal(false); clearImage(); }} className="btn bg-gray-300">Cancel</button>
                 <button type="submit" className="btn bg-blue-600 text-black">Save</button>
               </div>
             </form>
@@ -256,15 +336,57 @@ function Inventory() {
 
         {/* Edit Product Modal */}
         {showEditModal && currentProduct && (
-          <Modal title={`Edit ${currentProduct.name}`} onClose={() => setShowEditModal(false)}>
+          <Modal title={`Edit ${currentProduct.name}`} onClose={() => { setShowEditModal(false); clearImage(); }}>
             <form onSubmit={handleEditProduct} className="space-y-4">
+              {/* Image Upload Section */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
+                <div className="flex items-center gap-4">
+                  {imagePreview || currentProduct.image ? (
+                    <div className="relative">
+                      <img 
+                        src={imagePreview || currentProduct.image} 
+                        alt="Preview" 
+                        className="w-20 h-20 object-cover rounded-lg border"
+                      />
+                      <button
+                        type="button"
+                        onClick={clearImage}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-300">
+                      <Camera size={20} className="text-gray-400" />
+                    </div>
+                  )}
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      id="edit-image-upload"
+                    />
+                    <label
+                      htmlFor="edit-image-upload"
+                      className="cursor-pointer bg-blue-500 text-white px-3 py-2 rounded text-sm hover:bg-blue-600"
+                    >
+                      {currentProduct.image || imagePreview ? 'Change Image' : 'Choose Image'}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
               <input name="name" defaultValue={currentProduct.name} required className="w-full border px-3 py-2 rounded mb-4" />
               <input name="qty" type="number" defaultValue={currentProduct.qty} required className="w-full border px-3 py-2 rounded mb-4" />
               <input name="unit" defaultValue={currentProduct.unit} required className="w-full border px-3 py-2 rounded mb-4" />
               <input name="date" type="date" defaultValue={currentProduct.date} required className="w-full border px-3 py-2 rounded mb-4" />
               <input name="category" defaultValue={currentProduct.category} required placeholder="Category" className="w-full border px-3 py-2 rounded mb-4" />
               <div className="flex justify-end gap-2">
-                <button type="button" onClick={() => setShowEditModal(false)} className="btn bg-gray-300">Cancel</button>
+                <button type="button" onClick={() => { setShowEditModal(false); clearImage(); }} className="btn bg-gray-300">Cancel</button>
                 <button type="submit" className="btn bg-green-600 text-black">Update</button>
               </div>
             </form>
