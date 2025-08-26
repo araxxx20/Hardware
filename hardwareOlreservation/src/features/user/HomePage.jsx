@@ -24,17 +24,19 @@ function HomePage() {
     <Box>
       {/* Hero Banner */}
       <Box sx={{
-        backgroundImage: 'url(/assets/images/bg.jpg)',
+        backgroundImage: 'url(/assets/bg.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         position: 'relative',
+        width: '100vw',
+        mx: 'calc(50% - 50vw)',
         '&::before': {
           content: '""',
           position: 'absolute',
           inset: 0,
           background: 'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.35) 100%)'
         },
-        py: { xs: 6, md: 8 },
+        py: { xs: 8, md: 10 },
         mb: 3
       }}>
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
@@ -47,7 +49,7 @@ function HomePage() {
         </Container>
       </Box>
 
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ px: { xs: 1, sm: 2 } }}>
         {/* Search */}
         <Box sx={{ mb: 3 }}>
           <TextField
@@ -104,10 +106,22 @@ function HomePage() {
             </Typography>
           </Box>
         ) : (
-          <Grid container spacing={2}>
+          <Grid
+            container
+            spacing={{ xs: 0, sm: 2, md: 3 }}
+            alignItems="stretch"
+            sx={{
+              mx: 'auto',
+              display: { xs: 'grid', sm: 'flex' },
+              gridTemplateColumns: { xs: 'repeat(2, 1fr)' },
+              gap: { xs: 1 }
+            }}
+          >
             {filteredProducts.map((product) => (
-              <Grid item xs={6} sm={4} md={3} key={product.id}>
-                <ProductCard product={product} onClick={() => handleProductClick(product)} />
+              <Grid item xs={6} sm={6} md={4} lg={3} key={product.id}>
+                <Box sx={{ width: '100%' }}>
+                  <ProductCard product={product} onClick={() => handleProductClick(product)} />
+                </Box>
               </Grid>
             ))}
           </Grid>

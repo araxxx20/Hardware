@@ -59,8 +59,15 @@ function Layout({ setIsLoggedIn }) {
 
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const handleConfirmFromDrawer = (items, subtotal) => {
-    setDrawerOpen(false);
-    navigate('/reservation');
+    // Persist reservation, clear cart, then navigate
+    import('../../shared/services/ReservationHistoryService').then(({ default: ReservationHistoryService }) => {
+      try {
+        ReservationHistoryService.addReservation({ items, subtotal });
+      } catch (_) {}
+      ReservationService.clear();
+      setDrawerOpen(false);
+      navigate('/reservation');
+    });
   };
 
   return (
@@ -68,7 +75,7 @@ function Layout({ setIsLoggedIn }) {
       <AppBar position="sticky" elevation={2} sx={{ background: 'linear-gradient(90deg, #212121 0%, #303030 100%)', color: '#ffffff' }}>
         <Toolbar>
           <Box display="flex" alignItems="center" sx={{ flexGrow: 1 }}>
-            <Box component="img" src="/assets/images/logo1.png" alt="BABA Hardware" sx={{ height: 36, width: 'auto', mr: 1.5 }} onError={(e) => { e.target.style.display = 'none'; }} />
+            <Box component="img" src="/assets/logo1.png" alt="BABA Hardware" sx={{ height: 36, width: 'auto', mr: 1.5 }} onError={(e) => { e.target.style.display = 'none'; }} />
             <Typography variant="h6" component="div" sx={{ fontWeight: 700, color: '#ffffff' }}>
               Hardware
             </Typography>

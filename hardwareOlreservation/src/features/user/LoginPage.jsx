@@ -28,9 +28,9 @@ function LoginPage() {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', width: '100%', backgroundImage: 'url(/assets/images/bg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', '&::before': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.4)', zIndex: 1 } }}>
+    <Box sx={{ minHeight: '100vh', width: '100%', backgroundImage: 'url(/assets/bg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', '&::before': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.4)', zIndex: 1 } }}>
       {/* Welcome Text */}
-      <Box sx={{ position: 'absolute', right: { xs: '5%', md: '10%' }, top: '50%', transform: 'translateY(-50%)', textAlign: 'left', color: 'white', zIndex: 2 }}>
+      <Box sx={{ position: 'absolute', right: { xs: '5%', md: '10%' }, top: '50%', transform: 'translateY(-50%)', textAlign: { xs: 'center', md: 'left' }, color: 'white', zIndex: 2, display: { xs: 'none', md: 'block' }, backgroundColor: 'rgba(0,0,0,0.35)', p: 2.5, borderRadius: 2, backdropFilter: 'blur(2px)' }}>
         <Typography variant="h2" sx={{ fontWeight: 'bold', mb: 2, textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
           WELCOME TO<br />
           BABA HARDWARE
@@ -41,10 +41,22 @@ function LoginPage() {
         </Typography>
       </Box>
 
+      {/* Compact welcome for mobile */}
+      <Box sx={{ position: 'absolute', top: 20, left: 0, right: 0, px: 2, zIndex: 2, display: { xs: 'block', md: 'none' }, textAlign: 'center' }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', textShadow: '1px 1px 2px rgba(0,0,0,0.5)', lineHeight: 1.2 }}>
+          WELCOME TO
+          <br />
+          BABA HARDWARE
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)', mt: 0.5 }}>
+          Your trusted partner for all electrical supplies and hardware needs. Quality products, competitive prices, and exceptional service since day one.
+        </Typography>
+      </Box>
+
       <Box sx={{ position: 'relative', zIndex: 2, left: { xs: 0, md: '-20%' } }}>
-        <Box sx={{ width: { xs: '90vw', sm: 400 }, p: 4, backgroundColor: '#212121', borderRadius: '25px', boxShadow: '0 10px 20px rgba(0, 0, 0, 0.3), 0 5px 30px rgba(255, 193, 7, 0.1)', mx: 2 }}>
+        <Box sx={{ width: { xs: '92vw', sm: 400 }, p: { xs: 3, sm: 4 }, backgroundColor: '#212121', borderRadius: '25px', boxShadow: '0 10px 20px rgba(0, 0, 0, 0.3), 0 5px 30px rgba(255, 193, 7, 0.1)', mx: 2 }}>
           <Box textAlign="center" mb={3}>
-            <img src="/assets/images/logo1.png" alt="BABA Hardware" style={{ height: 100, width: 150, marginBottom: 16, display: 'block', marginLeft: 'auto', marginRight: 'auto' }} onError={(e) => { e.target.style.display = 'none'; }} />
+            <img src="/assets/logo1.png" alt="BABA Hardware" style={{ height: 100, width: 150, marginBottom: 16, display: 'block', marginLeft: 'auto', marginRight: 'auto' }} onError={(e) => { e.target.style.display = 'none'; }} />
             <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>Log In</Typography>
           </Box>
           {error && (<Typography sx={{ color: 'red', mb: 1, textAlign: 'center' }}>{error}</Typography>)}
