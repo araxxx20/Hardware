@@ -15,6 +15,7 @@ const NavbarCashier = ({ children }) => {
   const menuItems = [
     { to: "/pos", icon: "fas fa-tachometer-alt", label: "POS" },
     { to: "/sales", icon: "fas fa-cash-register", label: "Sales" },
+    { to: "/cashier-reservations", icon: "fas fa-clipboard-list", label: "Customer Reservations" },
   ];
 
 const [currentTime, setCurrentTime] = useState(new Date());
