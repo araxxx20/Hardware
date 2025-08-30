@@ -55,18 +55,30 @@ function SignupPage() {
 
   return (
     <>
-      <Box sx={{ minHeight: '100vh', backgroundImage: 'url(/assets/images/bg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', '&::before': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.4)', zIndex: 1 } }}>
-        <Box sx={{ position: 'absolute', right: { xs: '50%', md: '10%' }, top: '50%', transform: { xs: 'translate(50%, -50%)', md: 'translateY(-50%)' }, textAlign: { xs: 'center', md: 'left' }, color: 'white', zIndex: 2, display: { xs: 'none', md: 'block' } }}>
+      <Box sx={{ minHeight: '100vh', backgroundImage: 'url(/assets/bg.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', flexDirection: { xs: 'column', md: 'row' }, alignItems: 'center', justifyContent: 'center', position: 'relative', py: { xs: 2, md: 0 }, '&::before': { content: '""', position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.4)', zIndex: 1 } }}>
+        <Box sx={{ position: 'absolute', right: { xs: '50%', md: '10%' }, top: '50%', transform: { xs: 'translate(50%, -50%)', md: 'translateY(-50%)' }, textAlign: { xs: 'center', md: 'left' }, color: 'white', zIndex: 2, display: { xs: 'none', md: 'block' }, backgroundColor: 'rgba(0,0,0,0.35)', p: 2.5, borderRadius: 2, backdropFilter: 'blur(2px)' }}>
           <Typography variant="h2" sx={{ fontWeight: 'bold', mb: 2, textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>JOIN<br />BABA HARDWARE</Typography>
           <Typography variant="h6" sx={{ maxWidth: 400, lineHeight: 1.6, textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>
             Create your account to access our complete catalog of electrical supplies, get exclusive deals, and enjoy fast checkout for all your hardware needs.
           </Typography>
         </Box>
 
-        <Box sx={{ position: 'relative', zIndex: 2, left: { xs: 0, md: '-20%' } }}>
-          <Box sx={{ width: { xs: '90vw', sm: 380 }, padding: 2.5, backgroundColor: '#212121', borderRadius: '20px', boxShadow: '0 10px 20px rgba(0, 0, 0, 0.3), 0 5px 30px rgba(255, 193, 7, 0.1)', mx: 2 }}>
+        {/* Compact hero for mobile */}
+        <Box sx={{ position: { xs: 'static', md: 'absolute' }, top: { md: 20 }, left: { md: 0 }, right: { md: 0 }, px: 2, zIndex: 2, display: { xs: 'block', md: 'none' }, textAlign: 'center', mb: { xs: 3.5, md: 0 }, pointerEvents: 'none' }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'white', textShadow: '1px 1px 2px rgba(0,0,0,0.5)', lineHeight: 1.2, fontSize: { xs: 18, sm: 20 } }}>
+            JOIN
+            <br />
+            BABA HARDWARE
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)', mt: 0.5, fontSize: { xs: 12, sm: 14 } }}>
+            Create your account to access our complete catalog of electrical supplies, get exclusive deals, and enjoy fast checkout for all your hardware needs.
+          </Typography>
+        </Box>
+
+        <Box sx={{ position: 'relative', zIndex: { xs: 4, md: 2 }, left: { xs: 0, md: '-20%' }, mt: { xs: 0, md: 0 } }}>
+          <Box sx={{ width: { xs: '92vw', sm: 380 }, padding: { xs: 2, sm: 2.5 }, backgroundColor: '#212121', borderRadius: '20px', boxShadow: '0 10px 20px rgba(0, 0, 0, 0.3), 0 5px 30px rgba(255, 193, 7, 0.1)', mx: 2 }}>
             <Box textAlign="center" mb={2}>
-              <img src="/assets/images/logo1.png" alt="BABA Hardware" style={{ height: 100, width: 150, marginBottom: 8, display: 'block', marginLeft: 'auto', marginRight: 'auto' }} onError={(e) => { e.target.style.display = 'none'; }} />
+              <img src="/assets/logo1.png" alt="BABA Hardware" style={{ height: 100, width: 150, marginBottom: 8, display: 'block', marginLeft: 'auto', marginRight: 'auto' }} onError={(e) => { e.target.style.display = 'none'; }} />
               <Typography variant="h5" sx={{ color: 'white', fontWeight: 'bold' }}>Create Account</Typography>
             </Box>
 

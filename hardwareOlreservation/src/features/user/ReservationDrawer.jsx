@@ -59,13 +59,13 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
                 transition: 'all 0.3s ease'
               }
             }}>
-              <CardContent sx={{ p: 2 }}>
-                <Box display="flex" alignItems="center">
+              <CardContent sx={{ p: { xs: 1.5, sm: 2 } }}>
+                <Box display="flex" alignItems="center" sx={{ justifyContent: 'space-between', flexWrap: 'nowrap', columnGap: { xs: 0.5, sm: 1 } }}>
                   <CardMedia 
                     component="img" 
                     sx={{ 
-                      width: 70, 
-                      height: 70, 
+                      width: { xs: 56, sm: 70 }, 
+                      height: { xs: 56, sm: 70 }, 
                       objectFit: 'cover', 
                       borderRadius: 2, 
                       mr: 2,
@@ -75,19 +75,21 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
                     alt={item.name} 
                     onError={(e) => { e.target.src = 'https://via.placeholder.com/70'; }} 
                   />
-                  <Box sx={{ flex: 1 }}>
-                    <Typography sx={{ fontWeight: 600, color: 'white', mb: 0.5 }}>{item.name}</Typography>
-                    <Typography sx={{ fontWeight: 'bold', color: '#FFC107', fontSize: 18 }}>{item.price}</Typography>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography noWrap sx={{ fontWeight: 600, color: 'white', mb: 0.5, overflow: 'hidden', textOverflow: 'ellipsis', fontSize: { xs: 13, sm: 14 } }}>{item.name}</Typography>
+                    <Typography sx={{ fontWeight: 'bold', color: '#FFC107', fontSize: { xs: 14, sm: 18 } }}>{item.price}</Typography>
                   </Box>
-                  <Box display="flex" alignItems="center" sx={{ mx: 1 }}>
-                    <IconButton 
+                  <Box display="flex" alignItems="center" sx={{ mx: { xs: 0.5, sm: 1 }, columnGap: { xs: 0.5, sm: 1 }, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                    <IconButton size="small"
                       onClick={() => ReservationService.updateQuantity(item.id, Math.max(1, (item.qty || 1) - 1))} 
                       disabled={(item.qty || 1) <= 1}
                       sx={{ 
                         color: '#FFC107',
                         backgroundColor: 'rgba(255, 193, 7, 0.1)',
                         '&:hover': { backgroundColor: 'rgba(255, 193, 7, 0.2)' },
-                        '&:disabled': { color: 'rgba(255,255,255,0.3)' }
+                        '&:disabled': { color: 'rgba(255,255,255,0.3)' },
+                        p: 0.25,
+                        '& .MuiSvgIcon-root': { fontSize: 18 }
                       }}
                     >
                       <Remove />
@@ -97,34 +99,43 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
                       onChange={(e) => ReservationService.updateQuantity(item.id, parseInt(e.target.value) || 1)} 
                       size="small" 
                       sx={{ 
-                        width: 70,
-                        mx: 1,
+                        width: { xs: 44, sm: 70 },
+                        mx: { xs: 0.5, sm: 1 },
                         '& .MuiOutlinedInput-root': {
                           backgroundColor: 'white',
                           borderRadius: 1,
                           '& fieldset': { borderColor: '#FFC107' },
                           '&:hover fieldset': { borderColor: '#FFB300' },
                           '&.Mui-focused fieldset': { borderColor: '#FFC107' }
+                        },
+                        '& .MuiInputBase-input': {
+                          p: '4px 6px',
+                          textAlign: 'center',
+                          fontSize: 12
                         }
                       }} 
                     />
-                    <IconButton 
+                    <IconButton size="small"
                       onClick={() => ReservationService.updateQuantity(item.id, (item.qty || 1) + 1)}
                       sx={{ 
                         color: '#FFC107',
                         backgroundColor: 'rgba(255, 193, 7, 0.1)',
-                        '&:hover': { backgroundColor: 'rgba(255, 193, 7, 0.2)' }
+                        '&:hover': { backgroundColor: 'rgba(255, 193, 7, 0.2)' },
+                        p: 0.25,
+                        '& .MuiSvgIcon-root': { fontSize: 18 }
                       }}
                     >
                       <Add />
                     </IconButton>
                   </Box>
-                  <IconButton 
+                  <IconButton size="small"
                     onClick={() => ReservationService.removeItem(item.id)} 
                     sx={{ 
                       color: '#f44336',
                       backgroundColor: 'rgba(244, 67, 54, 0.1)',
-                      '&:hover': { backgroundColor: 'rgba(244, 67, 54, 0.2)' }
+                      '&:hover': { backgroundColor: 'rgba(244, 67, 54, 0.2)' },
+                      ml: 1,
+                      flexShrink: 0
                     }}
                   >
                     <Delete />
@@ -146,6 +157,27 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
           <Typography sx={{ color: '#FFC107', fontSize: 20, fontWeight: 'bold' }}>₱{subtotal.toFixed(2)}</Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexDirection: { xs: 'column', sm: 'row' } }}>
+          <Button 
+            color="error"
+            variant="outlined"
+            disabled={items.length === 0}
+            onClick={() => { ReservationService.clear(); onClose && onClose(); }}
+            sx={{ 
+              flex: 1,
+              borderColor: 'rgba(244,67,54,0.6)',
+              color: '#ef9a9a',
+              py: 1.5,
+              borderRadius: 2,
+              fontWeight: 'bold',
+              fontSize: 16,
+              textTransform: 'none',
+              backgroundColor: 'transparent',
+              '&:hover': { backgroundColor: 'rgba(244,67,54,0.16)', borderColor: '#ef5350' },
+              '&:disabled': { color: 'rgba(255,255,255,0.3)', borderColor: 'rgba(255,255,255,0.2)' }
+            }}
+          >
+            Cancel Reservation
+          </Button>
           <Button 
             onClick={onClose}
             sx={{ 

@@ -39,9 +39,21 @@ function ReservationPage() {
                     </Typography>
                   </Box>
                   <Chip label={r.status} sx={{
-                    backgroundColor: 'rgba(255, 193, 7, 0.15)',
-                    color: '#FF8F00',
-                    border: '1px solid #FFE082',
+                    backgroundColor: String(r.status).toLowerCase().includes('ready')
+                      ? 'rgba(76, 175, 80, 0.15)'
+                      : String(r.status).toLowerCase().includes('cancel')
+                        ? 'rgba(244, 67, 54, 0.12)'
+                        : 'rgba(255, 193, 7, 0.15)',
+                    color: String(r.status).toLowerCase().includes('ready')
+                      ? '#2E7D32'
+                      : String(r.status).toLowerCase().includes('cancel')
+                        ? '#C62828'
+                        : '#FF8F00',
+                    border: String(r.status).toLowerCase().includes('ready')
+                      ? '1px solid #A5D6A7'
+                      : String(r.status).toLowerCase().includes('cancel')
+                        ? '1px solid #EF9A9A'
+                        : '1px solid #FFE082',
                     fontWeight: 600
                   }} />
                 </Box>
