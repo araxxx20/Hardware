@@ -11,6 +11,7 @@ import CustomerOrders from './pages/customerOrders';
 import POS from './pages/POS';
 import SalesReport from './pages/salesReport';
 import CashierSales from './pages/cashiersales';
+import CashierReservations from './pages/cashierReservations';
 import Login from './pages/Login'; // <-- Import the login page
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
             <Route path="/pos" element={<POS />} />
             <Route path="/salesReport" element={<SalesReport />} />
             <Route path="/sales" element={<CashierSales />} />
+            <Route path="/cashier-reservations" element={<CashierReservations />} />
           </Routes>
         </BrowserRouter>
       </OrderProvider>
