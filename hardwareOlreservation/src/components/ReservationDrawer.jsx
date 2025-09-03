@@ -10,10 +10,17 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
     const handler = () => {
       setItems(prev => {
         const latest = ReservationService.getItems();
-        return latest.map(i => ({
-          ...i,
-          checked: prev.find(p => p.id === i.id)?.checked ?? true
-        }));
+        return latest.map(i => {
+          const iKey = `${i.id}_${JSON.stringify(i.variations || {})}`;
+          const existingItem = prev.find(p => {
+            const pKey = `${p.id}_${JSON.stringify(p.variations || {})}`;
+            return pKey === iKey;
+          });
+          return {
+            ...i,
+            checked: existingItem?.checked ?? true
+          };
+        });
       });
     };
     window.addEventListener('reservationUpdated', handler);
@@ -73,7 +80,7 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
           </Box>
         ) : (
           items.map((item) => (
-            <Card key={item.id} sx={{ 
+            <Card key={`${item.id}_${JSON.stringify(item.variations || {})}`} sx={{ 
               mb: 2, 
               backgroundColor: '#ffffff',
               border: '1px solid #EEEEEE',
@@ -88,7 +95,13 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
                 <Box display="flex" alignItems="center" sx={{ justifyContent: 'space-between', flexWrap: 'nowrap', columnGap: { xs: 0.5, sm: 1 } }}>
                   <Checkbox 
                     checked={!!item.checked}
-                    onChange={() => setItems(prev => prev.map(it => it.id === item.id ? { ...it, checked: !it.checked } : it))}
+                    onChange={() => {
+                      const itemKey = `${item.id}_${JSON.stringify(item.variations || {})}`;
+                      setItems(prev => prev.map(it => {
+                        const itKey = `${it.id}_${JSON.stringify(it.variations || {})}`;
+                        return itKey === itemKey ? { ...it, checked: !it.checked } : it;
+                      }));
+                    }}
                     sx={{
                       color: '#FF9800',
                       '&.Mui-checked': { color: '#FF9800' },
@@ -117,7 +130,7 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
                   </Box>
                   <Box display="flex" alignItems="center" sx={{ mx: { xs: 0.5, sm: 1 }, columnGap: { xs: 0.5, sm: 1 }, flexShrink: 0, whiteSpace: 'nowrap' }}>
                     <IconButton size="small"
-                      onClick={() => ReservationService.updateQuantity(item.id, Math.max(1, (item.qty || 1) - 1))} 
+                      onClick={() => ReservationService.updateQuantity(item.id, Math.max(1, (item.qty || 1) - 1), item.variations || {})} 
                       disabled={(item.qty || 1) <= 1}
                       sx={{ 
                         color: '#FF9800',
@@ -132,7 +145,7 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
                     </IconButton>
                     <TextField 
                       value={item.qty || 1} 
-                      onChange={(e) => ReservationService.updateQuantity(item.id, parseInt(e.target.value) || 1)} 
+                      onChange={(e) => ReservationService.updateQuantity(item.id, parseInt(e.target.value) || 1, item.variations || {})} 
                       size="small" 
                       sx={{ 
                         width: { xs: 44, sm: 70 },
@@ -152,7 +165,7 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
                       }} 
                     />
                     <IconButton size="small"
-                      onClick={() => ReservationService.updateQuantity(item.id, (item.qty || 1) + 1)}
+                      onClick={() => ReservationService.updateQuantity(item.id, (item.qty || 1) + 1, item.variations || {})}
                       sx={{ 
                         color: '#FF9800',
                         backgroundColor: 'rgba(255, 193, 7, 0.1)',
@@ -165,7 +178,7 @@ function ReservationDrawer({ open, onClose, onConfirm }) {
                     </IconButton>
                   </Box>
                   <IconButton size="small"
-                    onClick={() => ReservationService.removeItem(item.id)} 
+                    onClick={() => ReservationService.removeItem(item.id, item.variations || {})} 
                     sx={{ 
                       color: '#f44336',
                       backgroundColor: 'rgba(244, 67, 54, 0.08)',

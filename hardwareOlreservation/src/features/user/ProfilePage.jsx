@@ -1,73 +1,82 @@
 import React from 'react';
-import { Container, Typography, Box, Avatar, TextField, Button, Paper, Divider } from '@mui/material';
-import MessageService from "../../shared/services/MessageService";
+import { Container, Typography, Box, Avatar, Paper, Divider, Button } from '@mui/material';
+import { Edit, Phone, Email, LocationOn } from '@mui/icons-material';
 
 function ProfilePage() {
   const user = React.useMemo(() => {
     try { return JSON.parse(sessionStorage.getItem('user') || '{}'); } catch { return {}; }
   }, []);
 
-  const [message, setMessage] = React.useState('');
-  const [messages, setMessages] = React.useState(MessageService.list());
-
-  React.useEffect(() => {
-    const handler = () => setMessages(MessageService.list());
-    window.addEventListener('userMessagesUpdated', handler);
-    return () => window.removeEventListener('userMessagesUpdated', handler);
-  }, []);
-
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <Box display="flex" alignItems="center" gap={2}>
-        <Avatar sx={{ width: 64, height: 64 }} src={user.profileImagePath || ''}>{(user.name || 'U').charAt(0)}</Avatar>
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 800 }}>{user.name || 'Guest'}</Typography>
-          <Typography color="text.secondary">{user.email || ''}</Typography>
+      {/* Profile Header */}
+      <Paper elevation={2} sx={{ p: 4, backgroundColor: '#ffffff', border: '1px solid #EEEEEE', borderRadius: 2, mb: 3 }}>
+        <Box display="flex" alignItems="center" gap={3} sx={{ mb: 3 }}>
+          <Avatar sx={{ width: 80, height: 80, fontSize: '2rem' }} src={user.profileImagePath || ''}>
+            {(user.name || 'U').charAt(0).toUpperCase()}
+          </Avatar>
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h4" sx={{ fontWeight: 800, mb: 1 }}>{user.name || 'Guest User'}</Typography>
+            <Typography variant="h6" color="text.secondary" sx={{ mb: 1 }}>{user.email || 'No email provided'}</Typography>
+            <Button
+              startIcon={<Edit />}
+              variant="outlined"
+              sx={{
+                borderColor: '#FFC107',
+                color: '#FF8F00',
+                '&:hover': { borderColor: '#FFB300', backgroundColor: 'rgba(255,193,7,0.08)' }
+              }}
+            >
+              Edit Profile
+            </Button>
+          </Box>
         </Box>
-      </Box>
-
-      <Paper elevation={2} sx={{ p: 3, mt: 3, backgroundColor: '#ffffff', border: '1px solid #EEEEEE', borderRadius: 2 }}>
-        <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5 }}>Message the Shop</Typography>
-        <Divider sx={{ mb: 2, borderColor: '#FFE082' }} />
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          Example: "I can’t pick up today; please hold until tomorrow." or any pickup updates.
-        </Typography>
-        <TextField fullWidth multiline minRows={3} value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Write a message to the shop..." sx={{ '& .MuiOutlinedInput-root': { backgroundColor: '#fff', borderRadius: 2 } }} />
-        <Button 
-          fullWidth
-          sx={{ 
-            mt: 2,
-            background: 'linear-gradient(90deg, #FFC107 0%, #FF9800 100%)',
-            color: 'white',
-            py: 1.25,
-            borderRadius: 2,
-            fontWeight: 'bold',
-            textTransform: 'none',
-            boxShadow: '0 4px 8px rgba(255, 193, 7, 0.3)',
-            '&:hover': { background: 'linear-gradient(90deg, #FFB300 0%, #F57C00 100%)', boxShadow: '0 6px 12px rgba(255, 193, 7, 0.4)' }
-          }}
-          disabled={!message.trim()}
-          onClick={() => { MessageService.add({ text: message.trim() }); setMessage(''); }}
-        >
-          Send Message
-        </Button>
+        <Divider sx={{ borderColor: '#FFE082' }} />
       </Paper>
 
-      <Paper elevation={1} sx={{ p: 3, mt: 2, backgroundColor: '#ffffff', border: '1px solid #EEEEEE', borderRadius: 2 }}>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1 }}>Previous Messages</Typography>
-        </Box>
-        <Divider sx={{ mb: 2, borderColor: '#FFE082' }} />
-        {messages.length === 0 ? (
-          <Typography color="text.secondary">No messages yet.</Typography>
-        ) : (
-          messages.map(m => (
-            <Box key={m.id} sx={{ mb: 2 }}>
-              <Typography variant="body2" color="text.secondary">{new Date(m.date).toLocaleString()}</Typography>
-              <Typography>{m.text}</Typography>
+      {/* Profile Information */}
+      <Paper elevation={2} sx={{ p: 3, backgroundColor: '#ffffff', border: '1px solid #EEEEEE', borderRadius: 2, mb: 3 }}>
+        <Typography variant="h6" sx={{ fontWeight: 800, mb: 2 }}>Profile Information</Typography>
+        <Divider sx={{ mb: 3, borderColor: '#FFE082' }} />
+        
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box display="flex" alignItems="center" gap={2}>
+            <Email sx={{ color: '#FF9800' }} />
+            <Box>
+              <Typography variant="body2" color="text.secondary">Email Address</Typography>
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>{user.email || 'Not provided'}</Typography>
             </Box>
-          ))
-        )}
+          </Box>
+
+          <Box display="flex" alignItems="center" gap={2}>
+            <Phone sx={{ color: '#FF9800' }} />
+            <Box>
+              <Typography variant="body2" color="text.secondary">Phone Number</Typography>
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>{user.phone || 'Not provided'}</Typography>
+            </Box>
+          </Box>
+
+          <Box display="flex" alignItems="center" gap={2}>
+            <LocationOn sx={{ color: '#FF9800' }} />
+            <Box>
+              <Typography variant="body2" color="text.secondary">Address</Typography>
+              <Typography variant="body1" sx={{ fontWeight: 500 }}>{user.address || 'Not provided'}</Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Paper>
+
+      {/* Account Statistics */}
+      <Paper elevation={2} sx={{ p: 3, backgroundColor: '#ffffff', border: '1px solid #EEEEEE', borderRadius: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: 800, mb: 2 }}>Account Statistics</Typography>
+        <Divider sx={{ mb: 3, borderColor: '#FFE082' }} />
+        
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ textAlign: 'center', p: 2, backgroundColor: 'rgba(255, 193, 7, 0.1)', borderRadius: 2, minWidth: 200 }}>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#FF8F00' }}>0</Typography>
+            <Typography variant="body2" color="text.secondary">Total Reservations</Typography>
+          </Box>
+        </Box>
       </Paper>
     </Container>
   );

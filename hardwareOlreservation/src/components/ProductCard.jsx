@@ -35,7 +35,7 @@ function ProductCard({ product, onClick }) {
           {product.name}
         </Typography>
         <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold', fontSize: { xs: '0.95rem', sm: '1rem' }, mb: 0.5 }}>
-          {product.price}
+          {product.basePrice || product.price}
         </Typography>
         <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 'auto' }}>
           <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}>

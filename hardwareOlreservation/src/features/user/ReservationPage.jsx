@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Typography, Box, Card, CardContent, Chip, Divider, Button } from '@mui/material';
 import { ReceiptLong } from '@mui/icons-material';
 import ReservationHistoryService from '../../shared/services/ReservationHistoryService';
+import ReservationMessageComponent from '../../components/ReservationMessageComponent';
 
 function ReservationPage() {
   const [reservations, setReservations] = useState(ReservationHistoryService.list());
@@ -99,6 +100,12 @@ function ReservationPage() {
                     </Button>
                   </Box>
                 </Box>
+
+                {/* Messages Component for this reservation */}
+                <ReservationMessageComponent 
+                  reservationId={r.id} 
+                  reservationCode={r.code} 
+                />
               </CardContent>
             </Card>
           ))}

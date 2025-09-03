@@ -17,7 +17,14 @@ export default class ReservationService {
 
   static addItem(newItem) {
     const items = ReservationService.getItems();
-    const existingIndex = items.findIndex(i => i.id === newItem.id);
+    
+    // Create a unique key for the item including variations
+    const itemKey = newItem.id + '_' + JSON.stringify(newItem.variations || {});
+    const existingIndex = items.findIndex(i => {
+      const existingKey = i.id + '_' + JSON.stringify(i.variations || {});
+      return existingKey === itemKey;
+    });
+    
     if (existingIndex >= 0) {
       const mergedQty = (items[existingIndex].qty || 1) + (newItem.qty || 1);
       items[existingIndex] = { ...items[existingIndex], qty: mergedQty };
@@ -27,14 +34,22 @@ export default class ReservationService {
     ReservationService.setItems(items);
   }
 
-  static updateQuantity(id, qty) {
+  static updateQuantity(id, qty, variations = {}) {
     if (qty < 1) return;
-    const items = ReservationService.getItems().map(i => i.id === id ? { ...i, qty } : i);
+    const itemKey = id + '_' + JSON.stringify(variations);
+    const items = ReservationService.getItems().map(i => {
+      const existingKey = i.id + '_' + JSON.stringify(i.variations || {});
+      return existingKey === itemKey ? { ...i, qty } : i;
+    });
     ReservationService.setItems(items);
   }
 
-  static removeItem(id) {
-    const items = ReservationService.getItems().filter(i => i.id !== id);
+  static removeItem(id, variations = {}) {
+    const itemKey = id + '_' + JSON.stringify(variations);
+    const items = ReservationService.getItems().filter(i => {
+      const existingKey = i.id + '_' + JSON.stringify(i.variations || {});
+      return existingKey !== itemKey;
+    });
     ReservationService.setItems(items);
   }
 
